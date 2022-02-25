@@ -20,14 +20,14 @@ localStorage.setItem("taskyCA", JSON.stringify({ cards: globalTaskData }));
 
 //generate HTML code for new card
 
-const newCard=`<div class="col-md-6 col-lg-4 my-4" id=${card.id}">
+const newCard=`<div class="col-md-6 col-lg-4 my-4" id=${card.id}>
 <div class="card">
   <div class="card-header d-flex justify-content-end gap-2">
     <button class="btn btn-outline-info">
       <i class="fa fa-pencil" aria-hidden="true"></i>
     </button>
-   <button class="btn btn-outline-danger">
-     <i class="fa fa-trash-o" aria-hidden="true"></i>
+   <button class="btn btn-outline-danger" name="${card.id}" onclick="deleteCard.apply(this,arguments)">
+     <i class="fa fa-trash-o" aria-hidden="true" name="${card.id}" onclick="deleteCard.apply(this,arguments)"></i>
   </button> 
   
   </div>
@@ -80,8 +80,8 @@ globalTaskData.map((card)=>{
       <button class="btn btn-outline-info">
         <i class="fa fa-pencil" aria-hidden="true"></i>
       </button>
-     <button class="btn btn-outline-danger">
-       <i class="fa fa-trash-o" aria-hidden="true"></i>
+     <button class="btn btn-outline-danger" name="${card.id}" onclick="deleteCard.apply(this,arguments)">
+       <i class="fa fa-trash-o" aria-hidden="true" name="${card.id}" onclick="deleteCard.apply(this,arguments)"></i>
     </button> 
     
     </div>
@@ -109,3 +109,29 @@ return ;
 };
 
 
+const deleteCard=(event)=>{
+  const targetID=event.target.getAttribute("name");
+  const elementType=event.target.tagName;
+  const removeTask=globalTaskData.filter((task)=>{
+    return task.id !== targetID;
+  });
+  globalTaskData=removeTask;
+  localStorage.setItem("taskyCA", JSON.stringify({ cards: globalTaskData }));
+  
+  //access DOM to remove the card
+  if(elementType==="BUTTON"){
+    return taskContainer.removeChild(event.target.parentNode.parentNode.parentNode);
+
+  }
+  else {
+    return taskContainer.removeChild(event.target.parentNode.parentNode.parentNode.parentNode);
+  }
+
+
+
+
+
+
+
+
+};
